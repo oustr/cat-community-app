@@ -21,8 +21,8 @@ export const enum Icons {
   Cam = "/static/images/campus_cat.png",
   View = "/static/images/view_the_illustration.png",
   Plan_PlanTag = "/static/images/plan/plan_tag.png",
-  GoToPath_Tag = "/static/images/plan/20231028-150934.png",
-  GoToArrow = "/static/images/plan/20231028-152045.png"
+  GoToPath_Tag = "/static/images/plan/GoToPath_heart_tag.png",
+  GoToArrow = "/static/images/plan/GoToPath_right_arrow.png"
 }
 
 export const enum Pages {
