@@ -19,7 +19,10 @@ export const enum Icons {
   Cancel = "/static/images/cancel.png",
   Tag = "/static/images/tag.png",
   Cam = "/static/images/campus_cat.png",
-  View = "/static/images/view_the_illustration.png"
+  View = "/static/images/view_the_illustration.png",
+  Plan_PlanTag = "/static/images/plan/plan_tag.png",
+  GoToPath_Tag = "/static/images/plan/20231028-150934.png",
+  GoToArrow = "/static/images/plan/20231028-152045.png"
 }
 
 export const enum Pages {
