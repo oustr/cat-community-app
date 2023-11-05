@@ -1,5 +1,5 @@
 <template>
-  <PlanEntry></PlanEntry>
+  <PlanEntry :plan="null"></PlanEntry>
   <PlanEntry v-for="(plan, index) in plans" :plan="plan"></PlanEntry>
 </template>
 
@@ -12,11 +12,6 @@ import { ref, reactive } from "vue";
 import { onReachBottom } from "@dcloudio/uni-app";
 const getPlanPreviewsReq = reactive<GetPlanPreviewsReq>({
   page: 0,
-  catId: "",
-  onlyUserId: "",
-  limit: 0,
-  lastToken: "",
-  backward: 0,
 })
 
 let allPreviewsLoaded = false;
@@ -27,14 +22,16 @@ const plans = ref<Plan[]>([]);
 const localGetPlanPreviews = async () => {
   let res = await getPlanPreviews(getPlanPreviewsReq)
   isPreviewsLoaded = false;
-  for (let i = 0; i < res.data?.length; i++) {
-    plans.value.push(res.data[i]);
+  for (let i = 0; i < res?.total; i++) {
+    plans.value.push(res.plans[i]);
   }
   isPreviewsLoaded = true;
   getPlanPreviewsReq.page += 1;
-  if (res.data?.length < 10) allPreviewsLoaded = true;
+  if (res?.total < 10) {
+    allPreviewsLoaded = true;
+  }
 }
-
+localGetPlanPreviews();
 onReachBottom(() => {
   if (isPreviewsLoaded && !allPreviewsLoaded) {
     localGetPlanPreviews();
