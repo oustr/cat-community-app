@@ -14,7 +14,6 @@ import { Icons } from "@/utils/url";
 <style scoped lang="scss">
 .frame {
   border-radius: 2vw;
-  height: 12vw;
   background-color: #feffff;
   display: flex;
   flex-direction: row;
