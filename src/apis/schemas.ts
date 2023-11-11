@@ -141,6 +141,44 @@ export interface Moment {
   isLiked: boolean;
 }
 
+export const enum PlanType {
+  feed = 0,
+  castrate,
+  heel
+}
+
+export const enum PlanState {
+  raising = 0,
+  raised = 1,
+  finished = 2
+}
+
+export interface Plan {
+  catId: string;
+  coverUrl: string;
+  createAt: number;
+  description: string;
+  endTime: number;
+  id: string;
+  imageUrls: string[];
+  initiatorId: string;
+  instruction: string;
+  maxFish: number;
+  name: string;
+  nowFish: number;
+  /**
+   * 枚举类型 0:募集中 1:实施中 2:已完成
+   */
+  planState: number;
+  /**
+   * 枚举类型 0:feed 1:castrate 2:heal
+   */
+  planType: PlanType;
+  startTime: number;
+  summary: string;
+  [property: string]: any;
+}
+
 export const enum TargetType {
   Post = 1,
   Comment,

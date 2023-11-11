@@ -1,21 +1,35 @@
 <template>
-  <TopBar>
-    <template #center>喵世界</template>
-  </TopBar>
-  <GoToMyPlans></GoToMyPlans>
-  <Card></Card>
-  <Card2></Card2>
-  <!--  <PlanEntry></PlanEntry>-->
+  <view class="background">
+    <!--上面空白高度还要改动-->
+
+    <view style="height: 24vw"></view>
+    <navigator url="/pages/plan/helped-plans/helped-plans">
+      进入helped-plans的测试入口
+    </navigator>
+    <navigator url="/pages/plan/plan-details/plan-details">
+      进入plan-details的测试入口
+    </navigator>
+    <view style="display: flex; margin-left: 2.5vw">
+      <GoToMyPlans></GoToMyPlans>
+      <FishAmount></FishAmount>
+    </view>
+    <PlanEntries></PlanEntries>
+  </view>
+
   <BottomBar id="plan"></BottomBar>
 </template>
 
 <script setup lang="ts">
-import TopBar from "@/components/TopBar.vue";
 import BottomBar from "@/components/BottomBar.vue";
 import GoToMyPlans from "@/pages/plan/GoToMyPlans.vue";
-import Card from "@/pages/plan/Card.vue";
-import Card2 from "@/pages/plan/Card2.vue";
-import PlanEntry from "@/pages/plan/PlanEntry.vue";
+
+import FishAmount from "@/pages/plan/FishAmount.vue";
+import PlanEntries from "@/pages/plan/PlanEntries.vue";
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.background {
+  background-color: #f4f9ff;
+  min-height: 100vh;
+}
+</style>

@@ -8,13 +8,14 @@
       <view class="center">
         <slot name="center"></slot>
       </view>
-      <view v-if="props.hasGoBack" class="left">
+      <view v-if="props.hasGoBack" class="left title">
         <image
           class="goBackImage"
           mode="scaleToFill"
           :src="Icons.GoBack"
           @click="goBack"
         ></image>
+        <slot name="left"></slot>
       </view>
       <view v-else class="left">
         <slot name="left"></slot>
@@ -42,8 +43,9 @@ const props = withDefaults(defineProps<Props>(), {
   hasGoBack: false
 });
 const goBack = () => {
-  let pages = getCurrentPages(); // 当前页面
-  let beforePage = pages[pages.length - 2]; // 上一页
+  // let pages = getCurrentPages(); // 当前页面
+  // let beforePage = pages[pages.length - 2]; // 上一页
+  // console.log(pages);
   uni.navigateBack({
     success: function () {
       // beforePage.onLoad(); // 执行上一页的onLoad方法
@@ -78,8 +80,14 @@ const goBack = () => {
     .left {
       position: fixed;
       left: 0;
+      display: flex;
+      align-items: center;
+      &.title {
+        font-size: 4.7vw;
+        font-weight: bold;
+      }
       .goBackImage {
-        margin-left: 3vw;
+        margin: 0 3vw;
         width: 2.4vw;
         height: 4vw;
       }
