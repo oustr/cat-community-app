@@ -27,7 +27,7 @@
     <view class="helping-card" @click="onClickPlan(props.plan.id)">
       <view class="small-icon">
         <img :src="Icons.Plan_PlanTag" class="plan-tag" />
-        <text class="content">{{ planTypeMap.get(props.plan.planType) }}</text>
+        <text class="content">{{ planTypeMap(props.plan.planType) }}</text>
       </view>
       <view class="help">
         <text class="context">{{ props.plan.summary }}</text>
@@ -37,7 +37,7 @@
           <view class="bar-content">
             <text class="txt1">帮助</text>
             <text class="helped-cat">{{ props.plan.catId }}</text>
-            <text class="txt2">完成绝育手术</text>
+            <text class="txt2">{{ props.plan.name }}</text>
           </view>
           <progress class="progress" percent="68" activeColor="#2073fb" backgroundColor="e6e6e6" stroke-width="6"
             active="true" border-radius="3" />
@@ -56,17 +56,12 @@
 import { ref } from "vue";
 import { Plan, PlanType } from "@/apis/schemas";
 import { Icons } from "@/utils/url";
-import { onClickPlan } from "@/pages/plan/utils";
+import { planTypeMap, onClickPlan } from "@/pages/plan/utils";
 
 const props = defineProps<{
   plan: Plan;
 }>();
 
-const planTypeMap = new Map<PlanType, string>([
-  [PlanType.feed, "零食奖励"],
-  [PlanType.castrate, "生理健康"],
-  [PlanType.heel, "治愈"]
-]);
 </script>
 
 <style scoped lang="scss">

@@ -2,8 +2,9 @@
   <BackgroundImage :url="plan?.coverUrl" :urls="[plan?.coverUrl]"></BackgroundImage>
   <BackButton></BackButton>
   <view class="background">
-
-    <Cards></Cards>
+    <template v-if="isInited">
+      <Cards :plan="plan"></Cards>
+    </template>
     <view style="height: 20vw"></view>
   </view>
   <BottomBar></BottomBar>
@@ -11,7 +12,6 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import TopBar from "@/components/TopBar.vue";
 import Cards from "@/pages/plan/plan-details/Cards.vue";
 import BottomBar from "@/pages/plan/plan-details/BottomBar.vue";
 import BackButton from "@/components/BackButton.vue"
@@ -29,19 +29,13 @@ const getPlanDetailReq = reactive<GetPlanDetailReq>({
 });
 const plan = ref<Plan>();
 
+let isInited = ref<boolean>(false);
+
 const getData = async () => {
   plan.value = (await getPlanDetail(getPlanDetailReq)).plan;
+  isInited.value = true;
 };
 
-const goBack = () => {
-  // eslint-disable-next-line no-undef
-  let pages = getCurrentPages(); // 当前页面
-  let beforePage = pages[pages.length - 2]; // 上一页
-  uni.navigateBack({
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    success: function () { }
-  });
-};
 getData()
 </script>
 
