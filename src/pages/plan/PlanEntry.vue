@@ -15,15 +15,8 @@
             <text class="helped-cat">怂怂</text>
             <text class="txt2">完成绝育手术</text>
           </view>
-          <progress
-            class="progress"
-            percent="68"
-            activeColor="#2073fb"
-            backgroundColor="e6e6e6"
-            stroke-width="6"
-            active="true"
-            border-radius="3"
-          />
+          <progress class="progress" percent="68" activeColor="#2073fb" backgroundColor="e6e6e6" stroke-width="6"
+            active="true" border-radius="3" />
           <view class="fish-prograss">已获得68小鱼干助力，还需要32小鱼干</view>
         </view>
         <view class="help_but"> 去助力 </view>
@@ -31,7 +24,7 @@
     </view>
   </div>
   <div v-else>
-    <view class="helping-card">
+    <view class="helping-card" @click="onClickPlan(props.plan.id)">
       <view class="small-icon">
         <img :src="Icons.Plan_PlanTag" class="plan-tag" />
         <text class="content">{{ planTypeMap.get(props.plan.planType) }}</text>
@@ -46,19 +39,11 @@
             <text class="helped-cat">{{ props.plan.catId }}</text>
             <text class="txt2">完成绝育手术</text>
           </view>
-          <progress
-            class="progress"
-            percent="68"
-            activeColor="#2073fb"
-            backgroundColor="e6e6e6"
-            stroke-width="6"
-            active="true"
-            border-radius="3"
-          />
-          <view class="fish-prograss"
-            >已获得{{ props.plan.nowFish }}小鱼干助力，还需要{{
-              props.plan.maxFish - props.plan.nowFish
-            }}小鱼干
+          <progress class="progress" percent="68" activeColor="#2073fb" backgroundColor="e6e6e6" stroke-width="6"
+            active="true" border-radius="3" />
+          <view class="fish-prograss">已获得{{ props.plan.nowFish }}小鱼干助力，还需要{{
+            props.plan.maxFish - props.plan.nowFish
+          }}小鱼干
           </view>
         </view>
         <view class="help_but"> 去助力 </view>
@@ -71,6 +56,7 @@
 import { ref } from "vue";
 import { Plan, PlanType } from "@/apis/schemas";
 import { Icons } from "@/utils/url";
+import { onClickPlan } from "@/pages/plan/utils";
 
 const props = defineProps<{
   plan: Plan;
