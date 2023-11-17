@@ -1,8 +1,8 @@
 <template>
-  <view class="goToMyPlans" @click="goToHelpedPlans()">
+  <view class="goToMyPlans">
     <img :src="Icons.GoToPath_Tag" class="small-icon" />
-    <text class="goTo_text">已助力8个计划</text>
-    <img :src="Icons.GoToArrow" class="arrow" />
+    <text class="goTo_text">已助力0个计划</text>
+    <!--    <img :src="Icons.GoToArrow" class="arrow" />-->
   </view>
 </template>
 
@@ -10,7 +10,6 @@
 import { Icons } from "@/utils/url";
 
 const goToHelpedPlans = () => {
-  console.log("go to helped plans");
   uni.navigateTo({
     url: "/pages/plan/helped-plans/helped-plans"
   });
@@ -26,8 +25,7 @@ const goToHelpedPlans = () => {
   flex-direction: row;
   align-items: center;
   margin-right: 3vw;
-  justify-content: space-between;
-  width: 48vw;
+  width: 46vw;
 
   .small-icon {
     height: 7vw;

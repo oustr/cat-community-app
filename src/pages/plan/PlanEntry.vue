@@ -1,86 +1,86 @@
 <template>
-  <div v-if="props.plan == null">
-    <view class="helping-card">
-      <view class="small-icon">
-        <img :src="Icons.Plan_PlanTag" class="plan-tag" />
-        <text class="content">生理健康</text>
-      </view>
-      <view class="help">
-        <text class="context">帮助猫咪进行绝育</text>
-      </view>
-      <view class="prograss-bar">
-        <view>
-          <view class="bar-content">
-            <text class="txt1">帮助</text>
-            <text class="helped-cat">怂怂</text>
-            <text class="txt2">完成绝育手术</text>
-          </view>
-          <progress
-            class="progress"
-            percent="68"
-            activeColor="#2073fb"
-            backgroundColor="e6e6e6"
-            stroke-width="6"
-            active="true"
-            border-radius="3"
-          />
-          <view class="fish-prograss">已获得68小鱼干助力，还需要32小鱼干</view>
-        </view>
-        <view class="help_but"> 去助力 </view>
-      </view>
+  <!--  <div v-if="props.plan == null">-->
+  <!--    <view class="helping-card">-->
+  <!--      <view class="small-icon">-->
+  <!--        <img :src="Icons.Plan_PlanTag" class="plan-tag" />-->
+  <!--        <text class="content">生理健康</text>-->
+  <!--      </view>-->
+  <!--      <view class="help">-->
+  <!--        <text class="context">帮助猫咪进行绝育</text>-->
+  <!--      </view>-->
+  <!--      <view class="prograss-bar">-->
+  <!--        <view>-->
+  <!--          <view class="bar-content">-->
+  <!--            <text class="txt1">帮助</text>-->
+  <!--            <text class="helped-cat">怂怂</text>-->
+  <!--            <text class="txt2">完成绝育手术</text>-->
+  <!--          </view>-->
+  <!--          <progress-->
+  <!--            class="progress"-->
+  <!--            percent="68"-->
+  <!--            activeColor="#2073fb"-->
+  <!--            backgroundColor="e6e6e6"-->
+  <!--            stroke-width="6"-->
+  <!--            active="true"-->
+  <!--            border-radius="3"-->
+  <!--          />-->
+  <!--          <view class="fish-prograss">已获得68小鱼干助力，还需要32小鱼干</view>-->
+  <!--        </view>-->
+  <!--        <view class="help_but"> 去助力 </view>-->
+  <!--      </view>-->
+  <!--    </view>-->
+  <!--  </div>-->
+  <!--  <div v-else>-->
+  <view
+    class="helping-card"
+    :style="`background-image: url('${props.plan.coverUrl}')`"
+    @click="onClickPlan(props.plan.id)"
+  >
+    <view class="small-icon">
+      <img :src="Icons.Plan_PlanTag" class="plan-tag" />
+      <text class="content">{{ planTypeMap(props.plan.planType) }}</text>
     </view>
-  </div>
-  <div v-else>
-    <view class="helping-card">
-      <view class="small-icon">
-        <img :src="Icons.Plan_PlanTag" class="plan-tag" />
-        <text class="content">{{ planTypeMap.get(props.plan.planType) }}</text>
-      </view>
-      <view class="help">
-        <text class="context">{{ props.plan.summary }}</text>
-      </view>
-      <view class="prograss-bar">
-        <view>
-          <view class="bar-content">
-            <text class="txt1">帮助</text>
-            <text class="helped-cat">{{ props.plan.catId }}</text>
-            <text class="txt2">完成绝育手术</text>
-          </view>
-          <progress
-            class="progress"
-            percent="68"
-            activeColor="#2073fb"
-            backgroundColor="e6e6e6"
-            stroke-width="6"
-            active="true"
-            border-radius="3"
-          />
-          <view class="fish-prograss"
-            >已获得{{ props.plan.nowFish }}小鱼干助力，还需要{{
-              props.plan.maxFish - props.plan.nowFish
-            }}小鱼干
-          </view>
-        </view>
-        <view class="help_but"> 去助力 </view>
-      </view>
+    <view class="help">
+      <text class="context">{{ props.plan.summary }}</text>
     </view>
-  </div>
+    <view class="prograss-bar">
+      <view>
+        <view class="bar-content">
+          <text class="txt1">帮助</text>
+          <!--            <text class="helped-cat">{{ props.plan.catId }}</text>-->
+          <text class="helped-cat">匿名喵</text>
+          <text class="txt2">{{ props.plan.name }}</text>
+        </view>
+        <progress
+          class="progress"
+          :percent="(100 * props.plan.nowFish) / props.plan.maxFish"
+          activeColor="#2073fb"
+          backgroundColor="e6e6e6"
+          stroke-width="6"
+          active="true"
+          border-radius="3"
+        />
+        <view class="fish-prograss"
+          >已获得{{ props.plan.nowFish }}小鱼干助力，还需要{{
+            props.plan.maxFish - props.plan.nowFish
+          }}小鱼干
+        </view>
+      </view>
+      <view class="help_but"> 去助力 </view>
+    </view>
+  </view>
+  <!--  </div>-->
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { Plan, PlanType } from "@/apis/schemas";
 import { Icons } from "@/utils/url";
+import { planTypeMap, onClickPlan } from "@/pages/plan/utils";
 
 const props = defineProps<{
   plan: Plan;
 }>();
-
-const planTypeMap = new Map<PlanType, string>([
-  [PlanType.feed, "零食奖励"],
-  [PlanType.castrate, "生理健康"],
-  [PlanType.heel, "治愈"]
-]);
 </script>
 
 <style scoped lang="scss">
@@ -90,7 +90,8 @@ const planTypeMap = new Map<PlanType, string>([
   border-radius: 2vw;
   width: 95vw;
   height: 60vw;
-  background-color: #a2a4a7;
+  //background-color: #a2a4a7;
+  background-size: 100% 100%;
   display: flex;
   flex-direction: column;
 

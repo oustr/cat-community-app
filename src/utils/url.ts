@@ -21,16 +21,22 @@ export const enum Icons {
   Cam = "/static/images/campus_cat.png",
   View = "/static/images/view_the_illustration.png",
   Plan_PlanTag = "/static/images/plan/plan_tag.png",
+  Plan_Logo = "/static/images/plan/plan_logo.png",
   GoToPath_Tag = "/static/images/plan/GoToPath_heart_tag.png",
   GoToArrow = "/static/images/plan/GoToPath_right_arrow.png",
   CatExample = "/static/images/cat-example.png",
   LittleFish = "/static/images/Little_Fish.png",
   Frame = "/static/images/Frame.png",
-  DialogBox = "/static/images/dialog-box.png"
+  DialogBox = "/static/images/dialog-box.png",
+  State_Frame = "/static/images/state-frame.png",
+  Task_Pic = "/static/images/task-pic.png",
+  Pic_Left = "/static/images/pic-left.png",
+  Pic_Right = "/static/images/pic-right.png"
 }
 
 export const enum Pages {
   Plan = "/pages/plan/plan",
+  PlanDetails = "/pages/plan/plan-details/plan-details",
   FirstPage = "/pages/first-page/first-page",
   Cat = "/pages/cat/cat",
   Post = "/pages/post/post",
