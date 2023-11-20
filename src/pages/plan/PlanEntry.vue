@@ -64,7 +64,7 @@ const props = defineProps<{
   background-size: 100% 100%;
   display: flex;
   flex-direction: column;
-
+  overflow: hidden;
   .small-icon {
     transform: translateY(3vw);
 
@@ -105,7 +105,7 @@ const props = defineProps<{
     position: absolute;
     width: 100%;
     height: 100%;
-    box-shadow: 0 -5vw 20vw rgba(0, 0, 0, 1);
+    box-shadow: 0 0vw 15vw 5vw rgba(0, 0, 0, 0.8);
     z-index: 0;
   }
   .prograss-bar {
