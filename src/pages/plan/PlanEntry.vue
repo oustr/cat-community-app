@@ -90,6 +90,7 @@ const props = defineProps<{
     flex-direction: column;
     margin-top: 28vw;
     margin-left: 4vw;
+    z-index: 1;
 
     .context {
       color: #ffffff;
@@ -109,7 +110,7 @@ const props = defineProps<{
     height: 20vw;
     margin-top: 2vw;
     position: relative;
-
+    box-shadow: 0vw -5vw 20vw rgba(0, 0, 0, 1);
     .bar-content {
       display: flex;
       flex-direction: row;
