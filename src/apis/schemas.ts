@@ -157,6 +157,7 @@ export const enum PlanState {
 
 export interface Plan {
   catId: string;
+  catName: string;
   coverUrl: string;
   createAt: number;
   description: string;
@@ -180,7 +181,14 @@ export interface Plan {
   summary: string;
   [property: string]: any;
 }
-
+export interface planpreviews {
+  id: string;
+  name: string;
+  catName: string;
+  donateNum: number;
+  donateTime: number;
+  [property: string]: any;
+}
 export const enum TargetType {
   Post = 1,
   Comment,

@@ -1,36 +1,4 @@
 <template>
-  <!--  <div v-if="props.plan == null">-->
-  <!--    <view class="helping-card">-->
-  <!--      <view class="small-icon">-->
-  <!--        <img :src="Icons.Plan_PlanTag" class="plan-tag" />-->
-  <!--        <text class="content">生理健康</text>-->
-  <!--      </view>-->
-  <!--      <view class="help">-->
-  <!--        <text class="context">帮助猫咪进行绝育</text>-->
-  <!--      </view>-->
-  <!--      <view class="prograss-bar">-->
-  <!--        <view>-->
-  <!--          <view class="bar-content">-->
-  <!--            <text class="txt1">帮助</text>-->
-  <!--            <text class="helped-cat">怂怂</text>-->
-  <!--            <text class="txt2">完成绝育手术</text>-->
-  <!--          </view>-->
-  <!--          <progress-->
-  <!--            class="progress"-->
-  <!--            percent="68"-->
-  <!--            activeColor="#2073fb"-->
-  <!--            backgroundColor="e6e6e6"-->
-  <!--            stroke-width="6"-->
-  <!--            active="true"-->
-  <!--            border-radius="3"-->
-  <!--          />-->
-  <!--          <view class="fish-prograss">已获得68小鱼干助力，还需要32小鱼干</view>-->
-  <!--        </view>-->
-  <!--        <view class="help_but"> 去助力 </view>-->
-  <!--      </view>-->
-  <!--    </view>-->
-  <!--  </div>-->
-  <!--  <div v-else>-->
   <view
     class="helping-card"
     :style="`background-image: url('${props.plan.coverUrl}')`"
@@ -48,7 +16,7 @@
         <view class="bar-content">
           <text class="txt1">帮助</text>
           <!--            <text class="helped-cat">{{ props.plan.catId }}</text>-->
-          <text class="helped-cat">匿名喵</text>
+          <text class="helped-cat">{{ props.plan.catName }}</text>
           <text class="txt2">{{ props.plan.name }}</text>
         </view>
         <progress
@@ -77,16 +45,19 @@ import { ref } from "vue";
 import { Plan, PlanType } from "@/apis/schemas";
 import { Icons } from "@/utils/url";
 import { planTypeMap, onClickPlan } from "@/pages/plan/utils";
+import BackgroundImage from "@/components/BackgroundImage.vue";
 
 const props = defineProps<{
   plan: Plan;
 }>();
+console.log(props.plan);
 </script>
 
 <style scoped lang="scss">
 .helping-card {
   margin-left: 2.5vw;
-  margin-top: 3vw;
+  margin-top: 1vw;
+  margin-bottom: 2vw;
   border-radius: 2vw;
   width: 95vw;
   height: 60vw;
@@ -94,7 +65,7 @@ const props = defineProps<{
   background-size: 100% 100%;
   display: flex;
   flex-direction: column;
-
+  overflow: hidden;
   .small-icon {
     transform: translateY(3vw);
 
@@ -121,6 +92,7 @@ const props = defineProps<{
     flex-direction: column;
     margin-top: 28vw;
     margin-left: 4vw;
+    z-index: 1;
 
     .context {
       color: #ffffff;
@@ -129,7 +101,14 @@ const props = defineProps<{
       letter-spacing: 0.5vw;
     }
   }
-
+  .prograss-bar::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0vw 15vw 5vw rgba(0, 0, 0, 0.8);
+    z-index: 0;
+  }
   .prograss-bar {
     display: flex;
     flex-direction: column;
@@ -140,7 +119,6 @@ const props = defineProps<{
     height: 20vw;
     margin-top: 2vw;
     position: relative;
-
     .bar-content {
       display: flex;
       flex-direction: row;

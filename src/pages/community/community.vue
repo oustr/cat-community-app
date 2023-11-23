@@ -47,7 +47,6 @@ import SchoolSelectBar from "@/components/SchoolSelectBar.vue";
 import MasonryFrame from "@/pages/community/MasonryFrame.vue";
 import Cards from "@/pages/community/cards/cards.vue";
 import CarouselFrame from "@/pages/community/CarouselFrame.vue";
-import CarouselTest from "@/pages/community/CarouselTest.vue";
 import { onLoad, onPullDownRefresh, onReady, onShow } from "@dcloudio/uni-app";
 import { StorageKeys } from "@/utils/const";
 import { needChooseCommunity } from "@/utils/init";
@@ -83,8 +82,13 @@ onReady(() => {
   uni.hideLoading();
   //签到获取小鱼干
   const checkIn = async () => {
-    const xxx = await userCheckIn();
-    console.log(xxx);
+    const resp = await userCheckIn();
+    if (resp.isFirst) {
+      uni.showToast({
+        title: "今日签到成功~请查收" + resp.getFishNum + "小鱼干！",
+        icon: "none"
+      });
+    }
   };
   checkIn();
 });

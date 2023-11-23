@@ -1,5 +1,5 @@
 <template>
-  <view class="goToMyPlans">
+  <view class="goToMyPlans" @click="goToHelpedPlans()">
     <img :src="Icons.GoToPath_Tag" class="small-icon" />
     <text class="goTo_text">已助力{{ donateNum }}个计划</text>
     <!--    <img :src="Icons.GoToArrow" class="arrow" />-->
@@ -18,11 +18,11 @@ import { getCountDonate, getUserFish } from "@/apis/plan/plan";
 const donateNum = ref(0);
 const getDonateCount = async () => {
   const data = await getCountDonate({});
-  donateNum.value = data.total;
-  console.log(data.total);
+  if (data.total) {
+    donateNum.value = data.total;
+  }
 };
-
-getCountDonate();
+getDonateCount();
 </script>
 
 <style scoped lang="scss">
