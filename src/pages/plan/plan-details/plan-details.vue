@@ -26,7 +26,12 @@
             <view class="counter">
               <view class="now-fish">当前捐赠</view>
               <view>
-                <button class="counter-button decrement" @click="decrement">
+                <button
+                  class="counter-button decrement"
+                  @touchstart="startDecrementing"
+                  @touchend="stopDecrementing"
+                  @touchcancel="stopDecrementing"
+                >
                   -
                 </button>
                 <input
@@ -35,7 +40,12 @@
                   type="number"
                   class="count-display"
                 />
-                <button class="counter-button increment" @click="increment">
+                <button
+                  class="counter-button increment"
+                  @touchstart="startIncrementing"
+                  @touchend="stopIncrementing"
+                  @touchcancel="stopIncrementing"
+                >
                   +
                 </button>
               </view>
@@ -75,6 +85,7 @@ import { getPlanDetail, getUserFish, donateFish } from "@/apis/plan/plan";
 import BackgroundImage from "@/components/BackgroundImage.vue";
 import { onPullDownRefresh } from "@dcloudio/uni-app";
 import ToastBoxWithShadow from "@/components/ToastBoxWithShadow.vue";
+import { clearInterval, setInterval } from "timers";
 
 const showToast = ref<number>(0);
 
@@ -90,15 +101,41 @@ const showHelp = ref<boolean>(false);
 
 const count = ref<number>(10); // Initialize the count value
 
-function increment() {
-  count.value++; // Increment count
-}
+const increment = () => {
+  if (count.value < myFish.value) {
+    count.value++;
+    // if (speed > 50) {
+    //   speed -= 10;
+    //   restartInterval();
+    // }
+  } // Increment count
+};
 
-function decrement() {
+const decrement = () => {
   if (count.value > 0) {
     count.value--; // Decrement count
   }
-}
+};
+
+// let intervalId: string | number | NodeJS.Timeout | undefined = undefined;
+let speed = 200; // Initial speed in milliseconds
+// const restartInterval = () => {
+//   clearInterval(intervalId);
+//   intervalId = setInterval(increment, speed);
+// };
+
+const startIncrementing = () => {
+  increment();
+  // intervalId = setInterval(increment, speed);
+};
+const stopIncrementing = () => {
+  // clearInterval(intervalId);
+  // speed = 200;
+};
+const startDecrementing = () => {
+  decrement();
+};
+const stopDecrementing = () => {};
 
 const props = defineProps<{
   id: string;
@@ -120,7 +157,7 @@ const getData = async () => {
   isInited.value = true;
 };
 
-// 切换基于助力按钮的页面的状态
+// 一个基于助力按钮的页面的状态机
 const switchState = (fromButton: boolean) => {
   if (state.value === 0) {
     state.value = 1;
