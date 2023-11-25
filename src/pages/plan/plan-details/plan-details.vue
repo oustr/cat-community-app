@@ -12,31 +12,56 @@
       <view style="height: 20vw"></view>
     </view>
     <template v-if="showHelp && isInited">
-      <view class="overlay">
-        <view class="pull-up-container">
-          <view class="pull-up-header">
-            <!-- Header content goes here -->
-            <view class="title">目标小鱼干：{{ plan?.maxFish }}</view>
-            <view class="subtitle"
-              >距离完成目标还剩{{ plan?.maxFish - plan?.nowFish }}小鱼干</view
-            >
-          </view>
-          <view class="my-balance">我的余额</view>
-          <view class="counter">
-            <view class="now-fish"></view>
-            <button class="counter-button decrement" @click="decrement">
-              -
-            </button>
-            <span class="count-display">{{ count }}</span>
-            <button class="counter-button increment" @click="increment">
-              +
-            </button>
+      <view class="shadow" @click="quitHelp">
+        <view class="overlay" @click.stop.prevent>
+          <view class="pull-up-container">
+            <view class="pull-up-header">
+              <!-- Header content goes here -->
+              <view class="title">目标小鱼干：{{ plan?.maxFish }}</view>
+              <view class="subtitle"
+                >距离完成目标还剩{{ plan?.maxFish - plan?.nowFish }}小鱼干</view
+              >
+            </view>
+            <view class="my-balance">我的余额{{ myFish }}</view>
+            <view class="counter">
+              <view class="now-fish">当前捐赠</view>
+              <view>
+                <button class="counter-button decrement" @click="decrement">
+                  -
+                </button>
+                <input
+                  ref="input"
+                  v-model="count"
+                  type="number"
+                  class="count-display"
+                />
+                <button class="counter-button increment" @click="increment">
+                  +
+                </button>
+              </view>
+            </view>
           </view>
         </view>
       </view>
     </template>
   </template>
-  <BottomBar></BottomBar>
+  <template v-if="showToast === 1">
+    <ToastBoxWithShadow
+      bold-normal-text="助力小鱼干"
+      :bold-blue-text="'*' + count"
+      grey-text=""
+      @close="closeToastBox"
+    ></ToastBoxWithShadow>
+  </template>
+  <template v-if="showToast === -1">
+    <ToastBoxWithShadow
+      bold-normal-text="小鱼干不足"
+      :bold-blue-text="count"
+      grey-text=""
+      @close="closeToastBox"
+    ></ToastBoxWithShadow>
+  </template>
+  <BottomBar @on-help-click="switchState()"></BottomBar>
 </template>
 
 <script setup lang="ts">
@@ -46,13 +71,24 @@ import BottomBar from "@/pages/plan/plan-details/BottomBar.vue";
 import BackButton from "@/components/BackButton.vue";
 import { GetPlanDetailReq } from "@/apis/plan/plan-interfaces";
 import { Plan } from "@/apis/schemas";
-import { getPlanDetail } from "@/apis/plan/plan";
+import { getPlanDetail, getUserFish, donateFish } from "@/apis/plan/plan";
 import BackgroundImage from "@/components/BackgroundImage.vue";
 import { onPullDownRefresh } from "@dcloudio/uni-app";
+import ToastBoxWithShadow from "@/components/ToastBoxWithShadow.vue";
+
+const showToast = ref<number>(0);
+
+const closeToastBox = () => {
+  let refresh = false;
+  if (showToast.value === 1) refresh = true;
+  showToast.value = 0;
+  if (refresh) pageRefresh();
+};
+
+const state = ref<number>(0);
+const showHelp = ref<boolean>(false);
 
 const count = ref<number>(10); // Initialize the count value
-
-const showHelp = ref<boolean>(true);
 
 function increment() {
   count.value++; // Increment count
@@ -71,22 +107,50 @@ const props = defineProps<{
 const getPlanDetailReq = reactive<GetPlanDetailReq>({
   planId: props.id
 });
+
 const plan = ref<Plan>();
+const myFish = ref<number>(0);
 
 let isInited = ref<boolean>(false);
 
 const getData = async () => {
   plan.value = (await getPlanDetail(getPlanDetailReq)).plan;
+  myFish.value = (await getUserFish({})).fish;
+  count.value = 10;
   isInited.value = true;
 };
 
+// 切换基于助力按钮的页面的状态
+const switchState = () => {
+  if (state.value === 0) {
+    state.value += 1;
+    showHelp.value = true;
+  } else if (state.value === 1) {
+    if (count.value > myFish.value) {
+      showToast.value = -1;
+      return;
+    }
+    donateFish({ planId: props.id, fish: count.value });
+    quitHelp();
+    showToast.value = 1;
+  }
+};
+
+const quitHelp = () => {
+  state.value = 0;
+  showHelp.value = false;
+};
+
 const isRefreshing = ref(false);
+
 function pageRefresh() {
   isRefreshing.value = true;
+  getData();
   nextTick(() => {
     isRefreshing.value = false;
   });
 }
+
 onPullDownRefresh(() => {
   pageRefresh();
   uni.stopPullDownRefresh();
@@ -109,7 +173,19 @@ getData();
   z-index: -1;
   top: 0;
 }
-
+.shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 20vh;
+  width: 100vw;
+  height: 80vh;
+  background-color: #22222288;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
 .overlay {
   position: fixed;
   bottom: 20vw;
@@ -120,6 +196,7 @@ getData();
   border-top-right-radius: 16px;
   padding: 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 .pull-up-container {
@@ -152,20 +229,5 @@ getData();
   font-size: 24px;
   min-width: 60px;
   text-align: center;
-}
-
-.confirm-button {
-  width: 100%;
-  padding: 10px 0;
-  color: white;
-  font-size: 18px;
-  background-color: #1a73e8;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.confirm-button:active {
-  background-color: #1558b3;
 }
 </style>
