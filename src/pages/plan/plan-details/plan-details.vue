@@ -17,37 +17,42 @@
           <view class="pull-up-container">
             <view class="pull-up-header">
               <!-- Header content goes here -->
-              <view class="title">目标小鱼干：{{ plan?.maxFish }}</view>
-              <view class="subtitle"
-                >距离完成目标还剩{{ plan?.maxFish - plan?.nowFish }}小鱼干</view
+              <view class="title bold-text"
+                >目标小鱼干：{{ plan?.maxFish }}</view
               >
+              <view class="subtitle grey-text">
+                <text>距离完成目标还剩</text>
+                <text class="blue">{{ plan?.maxFish - plan?.nowFish }}</text>
+                <text>小鱼干</text>
+              </view>
+              <view class="my-balance bold-text">我的余额：{{ myFish }}</view>
             </view>
-            <view class="my-balance">我的余额{{ myFish }}</view>
+
             <view class="counter">
-              <view class="now-fish">当前捐赠</view>
-              <view>
-                <button
-                  class="counter-button decrement"
+              <view class="now-fish grey-text">当前捐赠</view>
+              <view class="input-bar">
+                <image
+                  :src="Icons.Button_Decrement"
+                  mode="scaleToFill"
+                  class="counter-button"
                   @touchstart="startDecrementing"
                   @touchend="stopDecrementing"
                   @touchcancel="stopDecrementing"
-                >
-                  -
-                </button>
+                />
                 <input
                   ref="input"
                   v-model="count"
                   type="number"
                   class="count-display"
                 />
-                <button
-                  class="counter-button increment"
+                <image
+                  :src="Icons.Button_Increment"
+                  mode="scaleToFill"
+                  class="counter-button"
                   @touchstart="startIncrementing"
                   @touchend="stopIncrementing"
                   @touchcancel="stopIncrementing"
-                >
-                  +
-                </button>
+                />
               </view>
             </view>
           </view>
@@ -86,6 +91,7 @@ import BackgroundImage from "@/components/BackgroundImage.vue";
 import { onPullDownRefresh } from "@dcloudio/uni-app";
 import ToastBoxWithShadow from "@/components/ToastBoxWithShadow.vue";
 import { clearInterval, setInterval } from "timers";
+import { Icons } from "@/utils/url";
 
 const showToast = ref<number>(0);
 
@@ -219,8 +225,6 @@ getData();
   height: 80vh;
   background-color: #22222288;
   display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1;
 }
 .overlay {
@@ -229,9 +233,9 @@ getData();
   left: 0;
   right: 0;
   background-color: rgba(255, 255, 255, 0.95);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  padding: 20px;
+  border-top-left-radius: 6vw;
+  border-top-right-radius: 6vw;
+  padding: 10vw;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   z-index: 2;
 }
@@ -239,32 +243,64 @@ getData();
 .pull-up-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
+  align-items: flex-start;
+  .pull-up-header {
+    .bold-text {
+      font-weight: bold;
+    }
+    .grey-text {
+      color: #9a9a9a;
+      font-size: 3.8vw;
+      .blue {
+        color: #1f5fff;
+      }
+    }
+    .my-balance {
+      margin-top: 2vh;
+      margin-bottom: 1vh;
+    }
+  }
+  .counter {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 1vw solid skyblue;
+    border-radius: 5vw;
+    height: 20vh;
+    width: 80vw;
+    .grey-text {
+      color: #9a9a9a;
+      font-size: 3.8vw;
+    }
+    .now-fish {
+      margin-bottom: 1vh;
+    }
+    .input-bar {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      .count-display {
+        font-size: 24px;
+        width: 30vw;
+        height: 5vh;
+        text-align: center;
 
-.counter {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+        background-color: #dedede;
+      }
+    }
+  }
 }
 
 .counter-button {
   display: inline-block;
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  margin: 0 10px;
+  width: 16vw;
+  height: 16vw;
+  line-height: 16vw;
   text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 16px;
-  background-color: #f7f7f7;
-  color: #333;
-  font-size: 18px;
-}
-
-.count-display {
-  font-size: 24px;
-  min-width: 60px;
-  text-align: center;
+  border: 1px solid #000;
+  border-radius: 8vw;
 }
 </style>
