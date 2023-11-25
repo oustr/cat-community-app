@@ -12,7 +12,7 @@
       <view style="height: 20vw"></view>
     </view>
     <template v-if="showHelp && isInited">
-      <view class="shadow" @click="quitHelp">
+      <view class="shadow" @click="switchState(false)">
         <view class="overlay" @click.stop.prevent>
           <view class="pull-up-container">
             <view class="pull-up-header">
@@ -61,7 +61,7 @@
       @close="closeToastBox"
     ></ToastBoxWithShadow>
   </template>
-  <BottomBar @on-help-click="switchState()"></BottomBar>
+  <BottomBar @on-help-click="switchState(true)"></BottomBar>
 </template>
 
 <script setup lang="ts">
@@ -121,24 +121,24 @@ const getData = async () => {
 };
 
 // 切换基于助力按钮的页面的状态
-const switchState = () => {
+const switchState = (fromButton: boolean) => {
   if (state.value === 0) {
-    state.value += 1;
+    state.value = 1;
     showHelp.value = true;
   } else if (state.value === 1) {
+    state.value = 0;
+    if (!fromButton) {
+      showHelp.value = false;
+      return;
+    }
     if (count.value > myFish.value) {
       showToast.value = -1;
       return;
     }
     donateFish({ planId: props.id, fish: count.value });
-    quitHelp();
+    showHelp.value = false;
     showToast.value = 1;
   }
-};
-
-const quitHelp = () => {
-  state.value = 0;
-  showHelp.value = false;
 };
 
 const isRefreshing = ref(false);
