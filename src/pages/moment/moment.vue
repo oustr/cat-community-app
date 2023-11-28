@@ -90,6 +90,7 @@
     :parent-id="moment.id"
     :parent-type="CommentType.Moment"
     :first-level-id="firstLevelId"
+    :like-comment-callback="likeCommentEmitter"
     @do-like="likeMoment(moment, likeCommentEmitter)"
     @after-create-comment="init"
     @cancel-reply="afterBlur"
@@ -206,7 +207,7 @@ const setGotFishNum = (num: number) => {
   gotFishNum.value = num;
 };
 
-const likeCommentCallback = (res: DoLikeResp) => {
+const likeCommentCallback = (res: DoLikeResp | NewCommentResp) => {
   if (res.getFish) {
     setGotFishNum(res.getFishNum);
     setShowToastBox(true);
@@ -293,7 +294,6 @@ const init = async () => {
   if (initLock) return;
   initLock = true;
   await getData();
-  likeCommentEmitter.addCallback(likeCommentCallback);
   page = 0;
   getCommentsReq.page = 0;
   comments.value = [];
@@ -310,6 +310,7 @@ uni.onKeyboardHeightChange((res) => {
 });
 
 onLoad(() => {
+  likeCommentEmitter.addCallback(likeCommentCallback);
   init();
 });
 

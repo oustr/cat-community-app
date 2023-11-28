@@ -104,9 +104,9 @@ export const createComment = async (
     }
     return false;
   }
-  uni.showToast({
-    title: "评论成功"
-  });
+  // uni.showToast({
+  //   title: "评论成功"
+  // });
   if (eventEmitter) eventEmitter.triggerCallbacks(res);
   return true;
 };
