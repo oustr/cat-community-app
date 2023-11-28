@@ -48,7 +48,7 @@ const localCreateComment = async () => {
   };
   text.value = "";
   const res = await createComment(req);
-  if (res) emit("afterCreateComment");
+  if (res !== false) emit("afterCreateComment");
 };
 
 const blur = () => {

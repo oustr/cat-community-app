@@ -90,7 +90,7 @@
     :parent-id="moment.id"
     :parent-type="CommentType.Moment"
     :first-level-id="firstLevelId"
-    @do-like="likeMoment(moment)"
+    @do-like="likeMoment(moment, likeCommentEmitter)"
     @after-create-comment="init"
     @cancel-reply="afterBlur"
   />
@@ -136,7 +136,8 @@ import {
   getCommentsData,
   likeComment,
   likeMoment,
-  onClickImage
+  onClickImage,
+  EventEmitter
 } from "@/pages/moment/utils";
 import { toPersonInfo } from "@/pages/profile/utils";
 import { GetMomentDetailReq } from "@/apis/moment/moment-components";
@@ -144,17 +145,24 @@ import { deleteMoment, getMomentDetail } from "@/apis/moment/moment";
 import { Comment, Moment, TargetType } from "@/apis/schemas";
 import { displayTime } from "@/utils/time";
 import { doLike } from "@/apis/like/like";
-import { CommentType, GetCommentsReq } from "@/apis/comment/comment-interfaces";
+import {
+  CommentType,
+  GetCommentsReq,
+  NewCommentResp
+} from "@/apis/comment/comment-interfaces";
 import { onLoad, onPullDownRefresh, onReachBottom } from "@dcloudio/uni-app";
 import Reply from "@/pages/moment/Reply.vue";
 import WriteCommentBox from "@/pages/moment/WriteCommentBox.vue";
 import CommentBox from "@/pages/moment/CommentBox.vue";
 import { Pages } from "@/utils/url";
 import { StorageKeys } from "@/utils/const";
+import { DoLikeResp } from "@/apis/like/like-interface";
 
 const props = defineProps<{
   id: string;
 }>();
+
+const likeCommentEmitter = new EventEmitter();
 
 const keyboardHeight = ref(0);
 
@@ -168,9 +176,13 @@ const commentDoLikeMap = new Map<string, number>();
 const commentDoLike = async (id: string) => {
   let commentLikeReq = {
     targetId: id,
-    targetType: TargetType.Comment
+    type: TargetType.Comment
   };
-  await doLike(commentLikeReq);
+  let res = await doLike(commentLikeReq);
+  if (res.getFish) {
+    setGotFishNum(res.getFishNum);
+    setShowToastBox(true);
+  }
 };
 
 const myUserId = uni.getStorageSync(StorageKeys.UserId);
@@ -192,6 +204,13 @@ const setShowToastBox = (bool: boolean) => {
 };
 const setGotFishNum = (num: number) => {
   gotFishNum.value = num;
+};
+
+const likeCommentCallback = (res: DoLikeResp) => {
+  if (res.getFish) {
+    setGotFishNum(res.getFishNum);
+    setShowToastBox(true);
+  }
 };
 
 const getData = async () => {
@@ -274,6 +293,7 @@ const init = async () => {
   if (initLock) return;
   initLock = true;
   await getData();
+  likeCommentEmitter.addCallback(likeCommentCallback);
   page = 0;
   getCommentsReq.page = 0;
   comments.value = [];
